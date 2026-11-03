@@ -34,6 +34,7 @@ add_executable(linreg_tests
   tests/test_main.cpp
   tests/test_linear_regression.cpp
   tests/test_csv.cpp
+  tests/test_parse.cpp
 )
 target_link_libraries(linreg_tests PRIVATE linreg)
 linreg_enable_warnings(linreg_tests)
@@ -49,3 +50,4 @@ set_tests_properties(app_bundled_data PROPERTIES
   PASS_REGULAR_EXPRESSION
     "Slope: 2[\r\n]+Intercept: 0[\r\n]+Prediction for x = 6: 12[\r\n]+Mean Squared Error: 0"
 )
+
