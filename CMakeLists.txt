@@ -51,3 +51,27 @@ set_tests_properties(app_bundled_data PROPERTIES
     "Slope: 2[\r\n]+Intercept: 0[\r\n]+Prediction for x = 6: 12[\r\n]+Mean Squared Error: 0"
 )
 
+# Command-line behaviour: a custom data path and x value.
+add_test(NAME app_custom_path_and_x
+  COMMAND linear_regression "${PROJECT_SOURCE_DIR}/data.csv" 7
+)
+set_tests_properties(app_custom_path_and_x PROPERTIES
+  PASS_REGULAR_EXPRESSION "Prediction for x = 7: 14"
+)
+
+# Invalid data must produce a clear error message and a non-zero exit code.
+foreach(case IN ITEMS malformed constant_x)
+  add_test(NAME app_${case}_exit_code
+    COMMAND linear_regression "${PROJECT_SOURCE_DIR}/tests/data/${case}.csv"
+  )
+  set_tests_properties(app_${case}_exit_code PROPERTIES WILL_FAIL TRUE)
+  add_test(NAME app_${case}_message
+    COMMAND linear_regression "${PROJECT_SOURCE_DIR}/tests/data/${case}.csv"
+  )
+endforeach()
+set_tests_properties(app_malformed_message PROPERTIES
+  PASS_REGULAR_EXPRESSION "Error: .*malformed\\.csv:3: expected two numbers"
+)
+set_tests_properties(app_constant_x_message PROPERTIES
+  PASS_REGULAR_EXPRESSION "Error: train: all x values are equal"
+)
